@@ -1,7 +1,7 @@
 export default async function ClientesPage() {
   try {
     const res = await fetch("https://rickandmortyapi.com/api/character", {
-      cache: "no-store", // evita que se guarde en caché
+      cache: "no-store",
     });
 
     if (!res.ok) throw new Error("Error al obtener personajes");
@@ -9,13 +9,27 @@ export default async function ClientesPage() {
     const data = await res.json();
 
     return (
-      <div className="p-4">
-        <h1 className="text-2xl font-bold mb-4">Personajes de Rick and Morty</h1>
-        <ul className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="min-h-screen bg-gray-50 p-6">
+        <h1 className="text-4xl font-bold text-center text-green-700 mb-10">
+          Personajes de Rick and Morty
+        </h1>
+
+        <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {data.results.map((character: any) => (
-            <li key={character.id} className="border p-2 rounded shadow">
-              <img src={character.image} alt={character.name} className="w-full rounded" />
-              <p className="mt-2 font-semibold text-center">{character.name}</p>
+            <li
+              key={character.id}
+              className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow"
+            >
+              <img
+                src={character.image}
+                alt={character.name}
+                className="w-full h-60 object-cover"
+              />
+              <div className="p-4 text-center">
+                <h2 className="text-lg font-semibold text-gray-800">{character.name}</h2>
+                <p className="text-sm text-gray-500">{character.species}</p>
+                <p className="text-sm text-gray-400">{character.status}</p>
+              </div>
             </li>
           ))}
         </ul>
@@ -24,9 +38,9 @@ export default async function ClientesPage() {
   } catch (error) {
     console.error("Error al cargar los personajes:", error);
     return (
-      <div className="p-4">
-        <h1 className="text-xl font-bold text-red-600">Error al cargar personajes</h1>
-        <p>Intenta nuevamente más tarde.</p>
+      <div className="min-h-screen bg-gray-50 p-6 flex flex-col items-center justify-center">
+        <h1 className="text-2xl font-bold text-red-600">Error al cargar personajes</h1>
+        <p className="text-gray-600 mt-2">Intenta nuevamente más tarde.</p>
       </div>
     );
   }

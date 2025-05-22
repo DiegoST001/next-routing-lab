@@ -4,9 +4,7 @@ type Params = {
   };
 };
 
-// Esta función se ejecuta en tiempo de construcción (build time).
-// Genera los parámetros estáticos para cada producto, que Next.js
-// usará para generar páginas individuales para cada ID de producto.
+// Genera rutas estáticas para cada producto
 export async function generateStaticParams() {
   const res = await fetch("https://fakestoreapi.com/products");
   const products = await res.json();
@@ -16,32 +14,34 @@ export async function generateStaticParams() {
   }));
 }
 
-// Este es el componente de página individual del producto.
-// Se ejecuta por cada ID generado en `generateStaticParams`.
+// Página individual del producto
 export default async function ProductPage({ params }: Params) {
   const res = await fetch(`https://fakestoreapi.com/products/${params.id}`);
   const product = await res.json();
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
-      {/* Título del producto */}
-      <h1 className="text-3xl font-bold mb-4">{product.title}</h1>
-
-      <div className="flex flex-col md:flex-row gap-6">
+    <div className="p-8 bg-gray-50 min-h-screen">
+      <div className="max-w-5xl mx-auto bg-white rounded-xl shadow-lg p-6 md:flex gap-8">
         {/* Imagen del producto */}
-        <img
-          src={product.image}
-          alt={product.title}
-          className="w-full max-w-sm object-contain border rounded-md shadow-md"
-        />
+        <div className="flex-shrink-0">
+          <img
+            src={product.image}
+            alt={product.title}
+            className="w-full max-w-xs object-contain rounded-lg border"
+          />
+        </div>
 
-        <div>
-          {/* Descripción del producto */}
-          <p className="text-gray-700 mb-4">{product.description}</p>
-          {/* Precio del producto */}
-          <p className="text-lg font-semibold text-green-600">
-            Precio: ${product.price}
+        {/* Detalles del producto */}
+        <div className="mt-6 md:mt-0">
+          <h1 className="text-3xl font-bold text-gray-800 mb-4">{product.title}</h1>
+          <p className="text-gray-600 mb-6">{product.description}</p>
+          <p className="text-2xl font-semibold text-green-600 mb-4">
+            ${product.price}
           </p>
+
+          <span className="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
+            Categoría: {product.category}
+          </span>
         </div>
       </div>
     </div>

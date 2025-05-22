@@ -1,28 +1,29 @@
 export default async function ProductsPage() {
   // Hacemos una solicitud HTTP a la API para obtener todos los productos.
   const res = await fetch('https://fakestoreapi.com/products');
-
-  // Convertimos la respuesta en formato JSON para obtener los datos como un arreglo de productos.
   const products = await res.json();
 
-  // Devolvemos el contenido que se mostrará en la página
   return (
-    <div className="p-6">
-      {/* Título principal de la página */}
-      <h1 className="text-2xl font-bold">Productos</h1>
+    <div className="p-8 bg-gray-50 min-h-screen">
+      <h1 className="text-4xl font-bold text-gray-800 mb-8 text-center">Nuestros Productos</h1>
 
-      {/* Lista de productos con espaciado vertical entre elementos */}
-      <ul className="mt-4 space-y-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {products.map((product: any) => (
-          // Cada producto se representa como un <li> con clave única basada en su ID
-          <li key={product.id}>
-            {/* Enlace al detalle del producto, utilizando su ID para construir la ruta */}
-            <a href={`/products/${product.id}`} className="text-blue-600 underline">
-              {product.title}
-            </a>
-          </li>
+          <a
+            key={product.id}
+            href={`/products/${product.id}`}
+            className="block bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300 p-4"
+          >
+            <img
+              src={product.image}
+              alt={product.title}
+              className="w-full h-48 object-contain mb-4"
+            />
+            <h2 className="text-lg font-semibold text-gray-700 line-clamp-2">{product.title}</h2>
+            <p className="text-sm text-gray-500 mt-2">${product.price}</p>
+          </a>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
